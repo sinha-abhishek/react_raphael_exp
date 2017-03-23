@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+  <script src="lib/raphael.js"></script>
+  <script type="text/javascript">
+    console.log("test 1");
+    window.onload = function() {
+      console.log("1 raphael js");
+      var paper = Raphael("paper", 400, 400);
+      paper.rect(0,0,400,400);
+      for (i = 0 ; i < 400 ; i= i +20) {
+        for (j = 0 ; j < 400; j = j+20) {
+          paper.rect(i,j,20,20);
+          if ( i == 200) {
+            var point = (200 - j)/20;
+            paper.text(i+5, j+5, point);
+          }
+          if (j == 200) {
+            var point = (i - 200)/20;
+            paper.text(i+5, j+5, point);
+          }
+        }
+      }
+      var xAxisR = paper.path("M 200 200 L 400 200").attr({
+         stroke: '#000000', 'stroke-width': 2, 'arrow-end':'classic'
+      });
+      var xAxisL = paper.path("M 200 200 L 0 200").attr({
+        stroke: '#000000', 'stroke-width': 2, 'arrow-end':'classic'
+      });
+      var yAxisR = paper.path("M 200 200 L 200 400").attr({
+        stroke: '#000000', 'stroke-width': 2, 'arrow-end':'classic'
+      });
+      var yAxisL = paper.path("M 200 200 L 200 0").attr({
+        stroke: '#000000', 'stroke-width': 2, 'arrow-end':'classic'
+      });
+      var start = function() {
+        this.ox = this.attr("cx");
+        this.oy = this.attr("cy");
+      };
+      var up = function() {};
+      paper.setStart()
+      var line1 = paper.path("M 230 0 L 230 400").attr({
+        stroke: '#E51E4E', 'stroke-width' : 2, 'arrow-end' : 'none'
+      });
+      var point1 = paper.circle(230,380,3).attr({
+        fill:'#000000', 'stroke-width':3
+      });
+      var point2 = paper.circle(230,80,3).attr({
+        fill:'#000000', 'stroke-width':3
+      });
+      var m = undefined;
+      var c = 0;
+      var line = paper.setFinish();
+      var move = function(dx, dy) {
+        nowX = Math.min(400, this.ox + dx);
+            nowY = Math.min(400, this.oy + dy);
+            nowX = Math.max(0, nowX);
+            nowY = Math.max(0, nowY);
+            this.attr({cx: nowX, cy: nowY });
+            var point1X = point1.attr("cx");
+            var point1Y = point1.attr("cy");
+
+            var point2X = point2.attr("cx");
+            var point2Y = point2.attr("cy");
+            line1.attr({path: "M "+point1X+" "+point1Y+" L "+point2X+" "+point2Y })
+            //line1.attr({path:"M" +nowX+" "+nowY+" L"+ 90 90"});
+      };
+
+
+      point1.drag(move, start, up);
+      point2.drag(move, start, up);
+
+
+
+    };
+  </script>
+</head>
+<div id="paper" style="margin:0 auto; width=400px; height=400px"></div>
+</html>
